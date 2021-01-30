@@ -200,6 +200,8 @@ pub struct CFProblem {
     pub points: Option<f64>,
     pub rating: Option<i64>,
     pub tags: Vec<String>,
+    #[serde(skip_deserializing)]
+    pub input_testcases: Option<Vec<String>>,
 }
 
 #[derive(Deserialize, Debug)]

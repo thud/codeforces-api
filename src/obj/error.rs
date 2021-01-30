@@ -3,6 +3,7 @@ pub enum Error {
     Http(reqwest::Error),
     Parse(reqwest::Error),
     CodeforcesApi(String),
+    User(&'static str),
 }
 
 impl From<reqwest::Error> for Error {
@@ -17,6 +18,7 @@ impl std::fmt::Display for Error {
             Error::Http(ref e) => write!(f, "HTTP: {}", e),
             Error::Parse(ref e) => write!(f, "Parse: {}", e),
             Error::CodeforcesApi(ref s) => write!(f, "Codeforces API: {}", s),
+            Error::User(ref s) => write!(f, "User: {}", s),
         }
     }
 }
@@ -27,6 +29,7 @@ impl std::error::Error for Error {
             Error::Http(ref e) => Some(e),
             Error::Parse(ref e) => Some(e),
             Error::CodeforcesApi(_) => None,
+            Error::User(_) => None,
         }
     }
 }

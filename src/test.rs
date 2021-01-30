@@ -1,4 +1,5 @@
 use crate::obj::requests::*;
+use crate::obj::responses::*;
 
 // The following api keys are purely for testing, they refer to the
 // user "MikeWazowski". Not to be abused.
@@ -32,4 +33,28 @@ fn test_api_user_status() {
         count: Some(3),
     };
     println!("{:?}", x.get(&k, &s));
+}
+
+#[test]
+fn test_api_problem() {
+    let (k, s) = get_api_keys();
+    let x = CFContestCommand::Standings {
+        contest_id: 1477,
+        from: Some(1),
+        count: Some(1),
+        handles: Some(vec!["thud".to_owned()]),
+        room: None,
+        show_unofficial: Some(false),
+    };
+    let y = x.get(&k, &s);
+    println!("y = {:?}", y);
+    if let Ok(CFResult::CFContestStandings(CFContestStandings {
+        mut problems,
+        ..
+    })) = y
+    {
+        let p = &mut problems[5];
+        println!("{:?}", p.fetch_testcases());
+    }
+    println!("{:?}", fetch_testcases_for_problem(&1200, &"F".to_string()));
 }

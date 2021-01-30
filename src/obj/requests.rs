@@ -1,4 +1,6 @@
 use hex;
+use select::document::Document;
+use select::predicate::{Class, Descendant, Name};
 use sha2::{Digest, Sha512};
 use std::time::SystemTime;
 
@@ -482,5 +484,49 @@ impl CFAPIRequestable for CFUserCommand {
         api_secret: &String,
     ) -> Result<String, Error> {
         send_codeforces_api_req_raw(self, api_key, api_secret)
+    }
+}
+
+pub fn fetch_testcases_for_problem(
+    contest_id: &i64,
+    problem_index: &String,
+) -> Result<Vec<String>, Error> {
+    let url = "https://codeforces.com/problemset/problem/".to_string()
+        + &contest_id.to_string()
+        + "/"
+        + &problem_index.to_string();
+    match get_url(&url) {
+        Ok(res) => {
+            let document = Document::from_read(res).unwrap();
+            let testcases: Vec<String> = document
+                .find(Descendant(Class("input"), Name("pre")))
+                .map(|e| e.inner_html()) // TODO replace `<br>` with `\n`
+                .collect();
+            if testcases.is_empty() {
+                Err(Error::User("No testcase input found for this problem."))
+            } else {
+                Ok(testcases)
+            }
+        }
+        Err(e) => Err(Error::Http(e)),
+    }
+}
+
+impl responses::CFProblem {
+    pub fn fetch_testcases(&mut self) -> Result<Vec<String>, Error> {
+        if self.contest_id.is_none() {
+            return Err(Error::User("problem.contest_id field is required."));
+        }
+        if self.index.is_none() {
+            return Err(Error::User("problem.index field is required."));
+        }
+        let testcases = fetch_testcases_for_problem(
+            &self.contest_id.unwrap(),
+            &self.index.as_ref().unwrap(),
+        );
+        if let Ok(ref v) = testcases {
+            self.input_testcases = Some(v.to_vec());
+        }
+        testcases
     }
 }
