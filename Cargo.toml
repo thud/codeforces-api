@@ -3,6 +3,8 @@ name = "codeforces-api"
 version = "0.2.0"
 authors = ["thud"]
 edition = "2018"
+description = "Use auth api provided by Codeforces + download testcases"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
