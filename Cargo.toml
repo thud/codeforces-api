@@ -1,6 +1,6 @@
 [package]
 name = "codeforces-api"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["thud"]
 edition = "2018"
 description = "Use auth api provided by Codeforces + download testcases"
