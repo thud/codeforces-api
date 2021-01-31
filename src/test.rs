@@ -31,13 +31,13 @@ fn test_api_user() {
     let x = CFUserCommand::Friends { only_online: None };
     match x.get(&k, &s) {
         Ok(CFResult::CFFriends(v)) => {
-            println!("Received friends list successfully: {:?}", v);
+            println!("Received friends list successfully: {}", CFResult::CFFriends(v));
         }
         Ok(_) => {
             panic!("Fail, user.friends response not parsed into Vec<String>");
         }
         Err(e) => {
-            panic!("Fail, request failed: {:?}", e);
+            panic!("Fail, request failed: {}", e);
         }
     }
 }
@@ -53,8 +53,8 @@ fn test_api_user_status() {
     match x.get(&k, &s) {
         Ok(CFResult::CFSubmissionVec(v)) => {
             println!(
-                "Received user submissions (user.status) successfully: {:?}",
-                v
+                "Received user submissions (user.status) successfully: {}",
+                CFResult::CFSubmissionVec(v)
             );
         }
         Ok(_) => {
@@ -63,7 +63,7 @@ fn test_api_user_status() {
             );
         }
         Err(e) => {
-            panic!("Fail, request failed: {:?}", e);
+            panic!("Fail, request failed: {}", e);
         }
     }
 }
@@ -81,7 +81,7 @@ fn test_api_problem() {
     };
     match x.get(&k, &s) {
         Ok(CFResult::CFContestStandings(d)) => {
-            println!("Received contest standings (contest.standings) successfully: {:?}", d);
+            println!("Received contest standings (contest.standings) successfully: {}", CFResult::CFContestStandings(d));
         }
         Ok(_) => {
             panic!(
@@ -89,7 +89,7 @@ fn test_api_problem() {
             );
         }
         Err(e) => {
-            panic!("Fail, request failed: {:?}", e);
+            panic!("Fail, request failed: {}", e);
         }
     }
 }
@@ -113,7 +113,7 @@ fn test_fetch_testcase() {
             println!("Received problem testcases successfully: {:?}", v);
         }
         Err(e) => {
-            panic!("Fail, testcase request failed: {:?}", e);
+            panic!("Fail, testcase request failed: {}", e);
         }
     }
 }

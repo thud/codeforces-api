@@ -1,20 +1,40 @@
-use serde::Deserialize;
+use std::fmt;
+use serde::{Deserialize, Serialize};
+use serde_yaml;
 
-#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFResponseStatus {
     Ok,
     Failed,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+impl fmt::Display for CFResponseStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct CFResponse {
     pub status: CFResponseStatus,
     pub result: Option<CFResult>,
     pub comment: Option<String>,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+impl fmt::Display for CFResponse {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum CFResult {
     CFCommentVec(Vec<CFComment>),
@@ -32,7 +52,16 @@ pub enum CFResult {
     CFRatingChangeVec(Vec<CFRatingChange>),
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
+impl fmt::Display for CFResult {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFUser {
     pub handle: String,
@@ -56,7 +85,16 @@ pub struct CFUser {
     pub title_photo: String,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
+impl fmt::Display for CFUser {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFBlogEntry {
     pub id: i64,
@@ -72,7 +110,16 @@ pub struct CFBlogEntry {
     pub rating: i64,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
+impl fmt::Display for CFBlogEntry {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFComment {
     pub id: i64,
@@ -84,7 +131,16 @@ pub struct CFComment {
     pub rating: i64,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
+impl fmt::Display for CFComment {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFRecentAction {
     pub time_seconds: i64,
@@ -92,7 +148,16 @@ pub struct CFRecentAction {
     pub comment: Option<CFComment>,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
+impl fmt::Display for CFRecentAction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFRatingChange {
     pub contest_id: i64,
@@ -104,7 +169,16 @@ pub struct CFRatingChange {
     pub new_rating: i64,
 }
 
-#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
+impl fmt::Display for CFRatingChange {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 pub enum CFContestType {
     #[serde(rename = "CF")]
     Codeforces,
@@ -112,7 +186,16 @@ pub enum CFContestType {
     ICPC,
 }
 
-#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
+impl fmt::Display for CFContestType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFContestPhase {
     Before,
@@ -122,7 +205,16 @@ pub enum CFContestPhase {
     Finished,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+impl fmt::Display for CFContestPhase {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFContestStandings {
     pub contest: CFContest,
@@ -130,7 +222,16 @@ pub struct CFContestStandings {
     pub rows: Vec<CFRanklistRow>,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
+impl fmt::Display for CFContestStandings {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFContest {
     pub id: i64,
@@ -152,7 +253,16 @@ pub struct CFContest {
     pub season: Option<String>,
 }
 
-#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
+impl fmt::Display for CFContest {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFParticipantType {
     Contestant,
@@ -162,7 +272,16 @@ pub enum CFParticipantType {
     OutOfCompetition,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
+impl fmt::Display for CFParticipantType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFParty {
     pub contest_id: Option<i64>,
@@ -175,20 +294,47 @@ pub struct CFParty {
     pub start_time_seconds: Option<i64>,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
+impl fmt::Display for CFParty {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFMember {
     pub handle: String,
 }
 
-#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
+impl fmt::Display for CFMember {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFProblemType {
     Programming,
     Question,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+impl fmt::Display for CFProblemType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblem {
     pub contest_id: Option<i64>,
@@ -204,7 +350,16 @@ pub struct CFProblem {
     pub input_testcases: Option<Vec<String>>,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
+impl fmt::Display for CFProblem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblemStatistics {
     pub contest_id: Option<i64>,
@@ -212,14 +367,32 @@ pub struct CFProblemStatistics {
     pub solved_count: i64,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+impl fmt::Display for CFProblemStatistics {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblemset {
     pub problems: Vec<CFProblem>,
     pub problem_statistics: Vec<CFProblemStatistics>,
 }
 
-#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
+impl fmt::Display for CFProblemset {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFSubmissionVerdict {
     Failed,
@@ -241,7 +414,16 @@ pub enum CFSubmissionVerdict {
     Rejected,
 }
 
-#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
+impl fmt::Display for CFSubmissionVerdict {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFTestset {
     Samples,
@@ -270,7 +452,16 @@ pub enum CFTestset {
     TestS10,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+impl fmt::Display for CFTestset {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFSubmission {
     pub id: i64,
@@ -288,7 +479,16 @@ pub struct CFSubmission {
     pub points: Option<f64>,
 }
 
-#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
+impl fmt::Display for CFSubmission {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFHackVerdict {
     HackSuccessful,
@@ -301,7 +501,16 @@ pub enum CFHackVerdict {
     Other,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
+impl fmt::Display for CFHackVerdict {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFJudgeProtocol {
     pub manual: String,
@@ -309,7 +518,16 @@ pub struct CFJudgeProtocol {
     pub verdict: String,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+impl fmt::Display for CFJudgeProtocol {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFHack {
     pub id: i64,
@@ -322,7 +540,16 @@ pub struct CFHack {
     pub judge_protocol: Option<CFJudgeProtocol>,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+impl fmt::Display for CFHack {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFRanklistRow {
     pub party: CFParty,
@@ -335,14 +562,32 @@ pub struct CFRanklistRow {
     pub last_submission_time_seconds: Option<i64>,
 }
 
-#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
+impl fmt::Display for CFRanklistRow {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFProblemResultType {
     Preliminary,
     Final,
 }
 
-#[derive(Debug, Deserialize, Clone, PartialEq)]
+impl fmt::Display for CFProblemResultType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblemResult {
     pub points: f64,
@@ -352,3 +597,13 @@ pub struct CFProblemResult {
     pub problem_result_type: CFProblemResultType,
     pub best_submission_time_seconds: Option<i64>,
 }
+
+impl fmt::Display for CFProblemResult {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match serde_yaml::to_string(self) {
+            Ok(s) => write!(f, "{}", s),
+            Err(_) => Err(fmt::Error)
+        }
+    }
+}
+
