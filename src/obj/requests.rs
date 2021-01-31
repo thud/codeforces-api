@@ -9,13 +9,13 @@ use super::responses;
 
 const API_STUB: &str = "https://codeforces.com/api/";
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CFBlogEntryCommand {
     Comments { blog_entry_id: i64 },
     View { blog_entry_id: i64 },
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CFContestCommand {
     Hacks {
         contest_id: i64,
@@ -42,7 +42,7 @@ pub enum CFContestCommand {
     },
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CFProblemsetCommand {
     Problems {
         tags: Option<Vec<String>>,
@@ -57,7 +57,7 @@ pub enum CFProblemsetCommand {
     },
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CFUserCommand {
     BlogEntries {
         handle: String,

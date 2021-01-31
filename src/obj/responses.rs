@@ -1,20 +1,20 @@
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFResponseStatus {
     Ok,
     Failed,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq)]
 pub struct CFResponse {
     pub status: CFResponseStatus,
     pub result: Option<CFResult>,
     pub comment: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum CFResult {
     CFCommentVec(Vec<CFComment>),
@@ -32,7 +32,7 @@ pub enum CFResult {
     CFRatingChangeVec(Vec<CFRatingChange>),
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFUser {
     pub handle: String,
@@ -56,7 +56,7 @@ pub struct CFUser {
     pub title_photo: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFBlogEntry {
     pub id: i64,
@@ -72,7 +72,7 @@ pub struct CFBlogEntry {
     pub rating: i64,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFComment {
     pub id: i64,
@@ -84,7 +84,7 @@ pub struct CFComment {
     pub rating: i64,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFRecentAction {
     pub time_seconds: i64,
@@ -92,7 +92,7 @@ pub struct CFRecentAction {
     pub comment: Option<CFComment>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFRatingChange {
     pub contest_id: i64,
@@ -104,7 +104,7 @@ pub struct CFRatingChange {
     pub new_rating: i64,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
 pub enum CFContestType {
     #[serde(rename = "CF")]
     Codeforces,
@@ -112,7 +112,7 @@ pub enum CFContestType {
     ICPC,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFContestPhase {
     Before,
@@ -122,7 +122,7 @@ pub enum CFContestPhase {
     Finished,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFContestStandings {
     pub contest: CFContest,
@@ -130,7 +130,7 @@ pub struct CFContestStandings {
     pub rows: Vec<CFRanklistRow>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFContest {
     pub id: i64,
@@ -152,7 +152,7 @@ pub struct CFContest {
     pub season: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFParticipantType {
     Contestant,
@@ -162,7 +162,7 @@ pub enum CFParticipantType {
     OutOfCompetition,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFParty {
     pub contest_id: Option<i64>,
@@ -175,20 +175,20 @@ pub struct CFParty {
     pub start_time_seconds: Option<i64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFMember {
     pub handle: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFProblemType {
     Programming,
     Question,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblem {
     pub contest_id: Option<i64>,
@@ -204,7 +204,7 @@ pub struct CFProblem {
     pub input_testcases: Option<Vec<String>>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblemStatistics {
     pub contest_id: Option<i64>,
@@ -212,14 +212,14 @@ pub struct CFProblemStatistics {
     pub solved_count: i64,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblemset {
     pub problems: Vec<CFProblem>,
     pub problem_statistics: Vec<CFProblemStatistics>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFSubmissionVerdict {
     Failed,
@@ -241,7 +241,7 @@ pub enum CFSubmissionVerdict {
     Rejected,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFTestset {
     Samples,
@@ -270,7 +270,7 @@ pub enum CFTestset {
     TestS10,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFSubmission {
     pub id: i64,
@@ -288,7 +288,7 @@ pub struct CFSubmission {
     pub points: Option<f64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFHackVerdict {
     HackSuccessful,
@@ -301,7 +301,7 @@ pub enum CFHackVerdict {
     Other,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFJudgeProtocol {
     pub manual: String,
@@ -309,7 +309,7 @@ pub struct CFJudgeProtocol {
     pub verdict: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFHack {
     pub id: i64,
@@ -322,7 +322,7 @@ pub struct CFHack {
     pub judge_protocol: Option<CFJudgeProtocol>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFRanklistRow {
     pub party: CFParty,
@@ -335,14 +335,14 @@ pub struct CFRanklistRow {
     pub last_submission_time_seconds: Option<i64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFProblemResultType {
     Preliminary,
     Final,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Debug, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblemResult {
     pub points: f64,
