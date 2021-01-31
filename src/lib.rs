@@ -1,4 +1,4 @@
-pub mod obj;
+mod obj;
 
 #[cfg(test)]
 mod test;
