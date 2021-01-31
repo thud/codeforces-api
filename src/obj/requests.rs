@@ -52,9 +52,6 @@ pub enum CFProblemsetCommand {
         count: i64,
         problemset_name: Option<String>,
     },
-    RecentActions {
-        max_count: i64,
-    },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -79,6 +76,11 @@ pub enum CFUserCommand {
         from: Option<i64>,
         count: Option<i64>,
     },
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct CFRecentActionsCommand {
+    max_count: i64,
 }
 
 pub fn as_codeforces_api_url<T: CFAPIRequestable + std::fmt::Debug>(
@@ -354,9 +356,6 @@ impl CFAPIRequestable for CFProblemsetCommand {
                     res.push(("problemsetName", s.to_string()));
                 }
             }
-            CFProblemsetCommand::RecentActions { max_count } => {
-                res.push(("maxCount", max_count.to_string()));
-            }
         }
         res
     }
@@ -367,10 +366,35 @@ impl CFAPIRequestable for CFProblemsetCommand {
             CFProblemsetCommand::RecentStatus { .. } => {
                 "problemset.recentStatus"
             }
-            CFProblemsetCommand::RecentActions { .. } => {
-                "problemset.recentActions"
-            }
         }
+    }
+
+    fn get(
+        &self,
+        api_key: &String,
+        api_secret: &String,
+    ) -> Result<responses::CFResult, Error> {
+        send_codeforces_api_req(self, api_key, api_secret)
+    }
+
+    fn get_raw(
+        &self,
+        api_key: &String,
+        api_secret: &String,
+    ) -> Result<String, Error> {
+        send_codeforces_api_req_raw(self, api_key, api_secret)
+    }
+}
+
+impl CFAPIRequestable for CFRecentActionsCommand {
+    fn query_params(&self) -> Vec<(&'static str, String)> {
+        let mut res = vec![];
+        res.push(("maxCount", self.max_count.to_string()));
+        res
+    }
+
+    fn method_name(&self) -> &'static str {
+        "recentActions"
     }
 
     fn get(
