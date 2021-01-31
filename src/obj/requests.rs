@@ -81,21 +81,6 @@ pub enum CFUserCommand {
     },
 }
 
-/*impl From<&CFBlogEntryCommand> for BTreeMap {
-    fn from(command: &CFBlogEntryCommand) -> Self {
-        let mut map = BTreeMap::new();
-        match &self {
-            CFBlogEntryCommand::Comments{ blog_entry_id } => {
-                map.insert("blogEntryId", blog_entry_id);
-            },
-            CFBlogEntryCommand::View{ blog_entry_id } => {
-                map.insert("blogEntryId", blog_entry_id);
-            },
-        }
-        map
-    }
-}*/
-
 pub fn as_codeforces_api_url<T: CFAPIRequestable + std::fmt::Debug>(
     command: &T,
     api_key: &String,
@@ -111,7 +96,7 @@ pub fn as_codeforces_api_url<T: CFAPIRequestable + std::fmt::Debug>(
     params.push(("time", ctime.to_string()));
     params.sort();
     let mut url = String::from(API_STUB);
-    url += command.method_name(); // "blogEntry.comments";
+    url += command.method_name();
     url += "?";
     let mut to_hash = String::new();
     to_hash += &rand;
@@ -141,7 +126,7 @@ pub fn as_codeforces_api_url<T: CFAPIRequestable + std::fmt::Debug>(
     url
 }
 
-pub fn send_codeforces_api_req<T: CFAPIRequestable + std::fmt::Debug>(
+fn send_codeforces_api_req<T: CFAPIRequestable + std::fmt::Debug>(
     req: &T,
     api_key: &String,
     api_secret: &String,
@@ -161,7 +146,7 @@ pub fn send_codeforces_api_req<T: CFAPIRequestable + std::fmt::Debug>(
     }
 }
 
-pub fn send_codeforces_api_req_raw<T: CFAPIRequestable + std::fmt::Debug>(
+fn send_codeforces_api_req_raw<T: CFAPIRequestable + std::fmt::Debug>(
     req: &T,
     api_key: &String,
     api_secret: &String,
