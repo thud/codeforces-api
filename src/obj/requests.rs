@@ -80,7 +80,7 @@ pub enum CFUserCommand {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CFRecentActionsCommand {
-    max_count: i64,
+    pub max_count: i64,
 }
 
 pub fn as_codeforces_api_url<T: CFAPIRequestable + std::fmt::Debug>(
