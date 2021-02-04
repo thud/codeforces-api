@@ -3,6 +3,8 @@ use select::document::Document;
 use select::predicate::{Class, Descendant, Name};
 use sha2::{Digest, Sha512};
 use std::time::SystemTime;
+use regex::Regex;
+use lazy_static::lazy_static;
 
 use super::error::*;
 use super::responses;
@@ -507,9 +509,13 @@ pub fn fetch_testcases_for_problem(
     match get_url(&url) {
         Ok(res) => {
             let document = Document::from_read(res).unwrap();
+            lazy_static! {
+                static ref RE: Regex = Regex::new(r"(<br>|<br/>)").unwrap();
+            }
             let testcases: Vec<String> = document
                 .find(Descendant(Class("input"), Name("pre")))
-                .map(|e| e.inner_html()) // TODO replace `<br>` with `\n`
+                .map(|e| e.inner_html())
+                .map(|e| RE.replace_all(&e, "\n").into())
                 .collect();
             if testcases.is_empty() {
                 Err(Error::User("No testcase input found for this problem."))
