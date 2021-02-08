@@ -502,7 +502,7 @@ pub fn fetch_testcases_for_problem(
     contest_id: &i64,
     problem_index: &String,
 ) -> Result<Vec<String>, Error> {
-    let url = "https://codeforces.com/contest".to_string()
+    let url = "https://codeforces.com/contest/".to_string()
         + &contest_id.to_string()
         + "/problem/"
         + &problem_index.to_string();
