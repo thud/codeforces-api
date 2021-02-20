@@ -1,9 +1,12 @@
 [package]
 name = "codeforces-api"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["thud"]
 edition = "2018"
 description = "Use auth api provided by Codeforces + download testcases"
+repository = "https://github.com/thud/codeforces-api"
+documentation = "https://docs.rs/codeforces-api/"
+readme = "README.md"
 license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
