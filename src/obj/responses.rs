@@ -1,3 +1,6 @@
+//! Contains the structs etc. which are returned by the Codeforces API
+//! following a request.
+
 use std::fmt;
 use serde::{Deserialize, Serialize};
 use serde_yaml;

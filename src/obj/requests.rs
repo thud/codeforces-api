@@ -1,4 +1,4 @@
-//! Contains the structs etc. required to interface with the codeforces api
+//! Contains the structs etc. required to interface with the Codeforces API
 //! and the testcases scraper.
 
 use rand::{self, Rng};
