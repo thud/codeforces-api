@@ -1,21 +1,17 @@
 use crate::obj::error::*;
 use crate::obj::requests::*;
 use crate::obj::responses::*;
+use crate::{TEST_API_KEY, TEST_API_SECRET};
 
-// The following api keys are purely for testing, they refer to the
-// user "MikeWazowski". Not to be abused.
-const TEST_API_KEY: &str = "7dd1c6a92bf0a6cb22b0e9fa9c08d1dac4948023";
-const TEST_SECRET: &str = "acc9a26087164935d62610ed693c063463e123c2";
-
-fn get_api_keys() -> (String, String) {
-    (TEST_API_KEY.to_string(), TEST_SECRET.to_string())
+fn get_api_keys() -> (&'static str, &'static str) {
+    (TEST_API_KEY, TEST_API_SECRET)
 }
 
 #[test]
 fn test_api_bad_blogentry() {
     let (k, s) = get_api_keys();
     let x = CFBlogEntryCommand::Comments { blog_entry_id: -1 };
-    match x.get(&k, &s) {
+    match x.get(k, s) {
         Err(Error::CodeforcesApi(e)) => {
             println!("Received expected error: {}", e);
         }
@@ -29,9 +25,10 @@ fn test_api_bad_blogentry() {
 fn test_api_user() {
     let (k, s) = get_api_keys();
     let x = CFUserCommand::Friends { only_online: None };
-    match x.get(&k, &s) {
+    match x.get(k, s) {
         Ok(CFResult::CFFriends(v)) => {
-            println!("Received friends list successfully: {}", CFResult::CFFriends(v));
+            println!("Received friends list successfully: {}",
+                CFResult::CFFriends(v));
         }
         Ok(_) => {
             panic!("Fail, user.friends response not parsed into Vec<String>");
@@ -50,7 +47,7 @@ fn test_api_user_status() {
         from: None,
         count: Some(3),
     };
-    match x.get(&k, &s) {
+    match x.get(k, s) {
         Ok(CFResult::CFSubmissionVec(v)) => {
             println!(
                 "Received user submissions (user.status) successfully: {}",
@@ -79,13 +76,15 @@ fn test_api_problem() {
         room: None,
         show_unofficial: Some(false),
     };
-    match x.get(&k, &s) {
+    match x.get(k, s) {
         Ok(CFResult::CFContestStandings(d)) => {
-            println!("Received contest standings (contest.standings) successfully: {}", CFResult::CFContestStandings(d));
+            println!("Received contest standings (contest.standings) \
+                successfully: {}", CFResult::CFContestStandings(d));
         }
         Ok(_) => {
             panic!(
-                "Fail, contest.standings response not parsed into CFContestStandings"
+                "Fail, contest.standings response not parsed into \
+                CFContestStandings"
             );
         }
         Err(e) => {

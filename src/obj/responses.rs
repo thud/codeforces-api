@@ -2,6 +2,9 @@ use std::fmt;
 use serde::{Deserialize, Serialize};
 use serde_yaml;
 
+/// Response code returned by Codeforces API (Ok, Failed).
+///
+/// This is extracted from JSON API responses (the `status` field).
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFResponseStatus {
@@ -10,6 +13,7 @@ pub enum CFResponseStatus {
 }
 
 impl fmt::Display for CFResponseStatus {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -18,6 +22,13 @@ impl fmt::Display for CFResponseStatus {
     }
 }
 
+/// Response type used internally which directly represents network responses
+/// sent back from the Codeforces API.
+///
+/// Note that using the `.get()` function on a type like
+/// [`CFUserCommand::Info`](super::requests::CFUserCommand::Info), will return
+/// a [`CFResult`] (in a result) and not this type. Internally, [`CFResponse`]
+/// is used as a wrapper to handle errors and serialization more easily.
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 pub struct CFResponse {
     pub status: CFResponseStatus,
@@ -26,6 +37,7 @@ pub struct CFResponse {
 }
 
 impl fmt::Display for CFResponse {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -34,6 +46,34 @@ impl fmt::Display for CFResponse {
     }
 }
 
+/// Wrapper for all forms of result returned by the Codeforces API.
+///
+/// # Examples
+///
+/// You probably want to match on it depending on the kind of request you are
+/// making.
+///
+/// ```
+/// # use codeforces_api::requests::*;
+/// # use codeforces_api::responses::*;
+/// # let api_key = codeforces_api::TEST_API_KEY;
+/// # let api_secret = codeforces_api::TEST_API_SECRET;
+/// let x = CFContestCommand::Status {
+///     contest_id: 1485,
+///     handle: None,
+///     from: Some(1),
+///     count: Some(3),
+/// };
+/// 
+/// // x.get(..) will return a CFResult type. You should match on it to make
+/// // sure that it returned the type you expected.
+/// // To check which type a request should return, you can check its docs.
+/// // If the type returned is of the form `Ok(<unexpected_type>)`, then an
+/// // internal parsing issue has occurred somewhere (this should be rare).
+/// if let Ok(CFResult::CFSubmissionVec(v)) = x.get(api_key, api_secret) {
+///     // your code here
+/// }
+/// ```
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum CFResult {
@@ -41,7 +81,7 @@ pub enum CFResult {
     CFBlogEntry(CFBlogEntry),
     CFHackVec(Vec<CFHack>),
     CFContestVec(Vec<CFContest>),
-    CFContestRatingChangeVec(Vec<CFRatingChange>),
+    CFRatingChangeVec(Vec<CFRatingChange>),
     CFContestStandings(CFContestStandings),
     CFSubmissionVec(Vec<CFSubmission>),
     CFProblemset(CFProblemset),
@@ -49,10 +89,10 @@ pub enum CFResult {
     CFBlogEntryVec(Vec<CFBlogEntry>),
     CFFriends(Vec<String>),
     CFUserVec(Vec<CFUser>),
-    CFRatingChangeVec(Vec<CFRatingChange>),
 }
 
 impl fmt::Display for CFResult {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -61,6 +101,8 @@ impl fmt::Display for CFResult {
     }
 }
 
+/// Struct representing a Codeforces
+/// [user](https://codeforces.com/apiHelp/objects#User).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFUser {
@@ -86,6 +128,7 @@ pub struct CFUser {
 }
 
 impl fmt::Display for CFUser {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -94,6 +137,8 @@ impl fmt::Display for CFUser {
     }
 }
 
+/// Struct representing a Codeforces
+/// [blog entry](https://codeforces.com/apiHelp/objects#BlogEntry).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFBlogEntry {
@@ -111,6 +156,7 @@ pub struct CFBlogEntry {
 }
 
 impl fmt::Display for CFBlogEntry {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -119,6 +165,8 @@ impl fmt::Display for CFBlogEntry {
     }
 }
 
+/// Struct representing a Codeforces blog entry
+/// [comment](https://codeforces.com/apiHelp/objects#Comment).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFComment {
@@ -132,6 +180,7 @@ pub struct CFComment {
 }
 
 impl fmt::Display for CFComment {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -140,6 +189,8 @@ impl fmt::Display for CFComment {
     }
 }
 
+/// Struct representing a Codeforces
+/// [recent action](https://codeforces.com/apiHelp/objects#RecentAction).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFRecentAction {
@@ -149,6 +200,7 @@ pub struct CFRecentAction {
 }
 
 impl fmt::Display for CFRecentAction {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -157,6 +209,8 @@ impl fmt::Display for CFRecentAction {
     }
 }
 
+/// Struct representing a Codeforces
+/// [rating change](https://codeforces.com/apiHelp/objects#RatingChange).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFRatingChange {
@@ -170,6 +224,7 @@ pub struct CFRatingChange {
 }
 
 impl fmt::Display for CFRatingChange {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -178,6 +233,7 @@ impl fmt::Display for CFRatingChange {
     }
 }
 
+/// Contest type returned by Codeforces API (eg. IOI, ICPC).
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 pub enum CFContestType {
     #[serde(rename = "CF")]
@@ -187,6 +243,7 @@ pub enum CFContestType {
 }
 
 impl fmt::Display for CFContestType {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -195,6 +252,7 @@ impl fmt::Display for CFContestType {
     }
 }
 
+/// Contest phase returned by Codeforces API (eg. PendingSystemTest).
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFContestPhase {
@@ -206,6 +264,7 @@ pub enum CFContestPhase {
 }
 
 impl fmt::Display for CFContestPhase {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -214,6 +273,9 @@ impl fmt::Display for CFContestPhase {
     }
 }
 
+/// Struct representing the object returned by a
+/// [`contest.standings`](super::requests::CFContestCommand::Standings)
+/// request.
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFContestStandings {
@@ -223,6 +285,7 @@ pub struct CFContestStandings {
 }
 
 impl fmt::Display for CFContestStandings {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -231,6 +294,8 @@ impl fmt::Display for CFContestStandings {
     }
 }
 
+/// Struct representing a Codeforces
+/// [contest](https://codeforces.com/apiHelp/objects#Contest).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFContest {
@@ -254,6 +319,7 @@ pub struct CFContest {
 }
 
 impl fmt::Display for CFContest {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -262,6 +328,7 @@ impl fmt::Display for CFContest {
     }
 }
 
+/// Participant type returned by Codeforces API (eg. Contestant, Virtual).
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFParticipantType {
@@ -273,6 +340,7 @@ pub enum CFParticipantType {
 }
 
 impl fmt::Display for CFParticipantType {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -281,6 +349,8 @@ impl fmt::Display for CFParticipantType {
     }
 }
 
+/// Struct representing a Codeforces
+/// [party](https://codeforces.com/apiHelp/objects#Party).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFParty {
@@ -295,6 +365,7 @@ pub struct CFParty {
 }
 
 impl fmt::Display for CFParty {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -303,6 +374,8 @@ impl fmt::Display for CFParty {
     }
 }
 
+/// Struct representing a Codeforces
+/// [member](https://codeforces.com/apiHelp/objects#Member).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFMember {
@@ -310,6 +383,7 @@ pub struct CFMember {
 }
 
 impl fmt::Display for CFMember {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -318,6 +392,7 @@ impl fmt::Display for CFMember {
     }
 }
 
+/// Problem type returned by Codeforces API (Programming, Question).
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFProblemType {
@@ -326,6 +401,7 @@ pub enum CFProblemType {
 }
 
 impl fmt::Display for CFProblemType {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -334,6 +410,8 @@ impl fmt::Display for CFProblemType {
     }
 }
 
+/// Struct representing a Codeforces
+/// [problem](https://codeforces.com/apiHelp/objects#Problem).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblem {
@@ -351,6 +429,7 @@ pub struct CFProblem {
 }
 
 impl fmt::Display for CFProblem {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -359,6 +438,8 @@ impl fmt::Display for CFProblem {
     }
 }
 
+/// Struct representing a Codeforces problem
+/// [statistics](https://codeforces.com/apiHelp/objects#ProblemStatistics).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblemStatistics {
@@ -368,6 +449,7 @@ pub struct CFProblemStatistics {
 }
 
 impl fmt::Display for CFProblemStatistics {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -376,6 +458,9 @@ impl fmt::Display for CFProblemStatistics {
     }
 }
 
+/// Struct representing the object returned by a
+/// [`problemset.problems`](super::requests::CFProblemsetCommand::Problems)
+/// request.
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblemset {
@@ -384,6 +469,7 @@ pub struct CFProblemset {
 }
 
 impl fmt::Display for CFProblemset {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -392,6 +478,7 @@ impl fmt::Display for CFProblemset {
     }
 }
 
+/// Submission verdict returned by Codeforces API (eg. Ok, CompilationError).
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFSubmissionVerdict {
@@ -415,6 +502,7 @@ pub enum CFSubmissionVerdict {
 }
 
 impl fmt::Display for CFSubmissionVerdict {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -423,6 +511,7 @@ impl fmt::Display for CFSubmissionVerdict {
     }
 }
 
+/// Testset returned by Codeforces API (eg. Pretests, TestSet1).
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFTestset {
@@ -431,28 +520,29 @@ pub enum CFTestset {
     Tests,
     Challenges,
     #[serde(rename = "TESTS1")]
-    TestS1,
+    TestSet1,
     #[serde(rename = "TESTS2")]
-    TestS2,
+    TestSet2,
     #[serde(rename = "TESTS3")]
-    TestS3,
+    TestSet3,
     #[serde(rename = "TESTS4")]
-    TestS4,
+    TestSet4,
     #[serde(rename = "TESTS5")]
-    TestS5,
+    TestSet5,
     #[serde(rename = "TESTS6")]
-    TestS6,
+    TestSet6,
     #[serde(rename = "TESTS7")]
-    TestS7,
+    TestSet7,
     #[serde(rename = "TESTS8")]
-    TestS8,
+    TestSet8,
     #[serde(rename = "TESTS9")]
-    TestS9,
+    TestSet9,
     #[serde(rename = "TESTS10")]
-    TestS10,
+    TestSet10,
 }
 
 impl fmt::Display for CFTestset {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -461,6 +551,8 @@ impl fmt::Display for CFTestset {
     }
 }
 
+/// Struct representing a Codeforces
+/// [submission](https://codeforces.com/apiHelp/objects#Submission).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFSubmission {
@@ -480,6 +572,7 @@ pub struct CFSubmission {
 }
 
 impl fmt::Display for CFSubmission {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -488,6 +581,7 @@ impl fmt::Display for CFSubmission {
     }
 }
 
+/// Hack verdict returned by Codeforces API (eg. HackSuccessful, Testing).
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFHackVerdict {
@@ -502,6 +596,7 @@ pub enum CFHackVerdict {
 }
 
 impl fmt::Display for CFHackVerdict {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -510,6 +605,7 @@ impl fmt::Display for CFHackVerdict {
     }
 }
 
+/// Struct representing a Codeforces judge protocol for hacks.
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFJudgeProtocol {
@@ -519,6 +615,7 @@ pub struct CFJudgeProtocol {
 }
 
 impl fmt::Display for CFJudgeProtocol {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -527,6 +624,8 @@ impl fmt::Display for CFJudgeProtocol {
     }
 }
 
+/// Struct representing a Codeforces
+/// [hack](https://codeforces.com/apiHelp/objects#Hack).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFHack {
@@ -541,6 +640,7 @@ pub struct CFHack {
 }
 
 impl fmt::Display for CFHack {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -549,6 +649,8 @@ impl fmt::Display for CFHack {
     }
 }
 
+/// Struct representing a Codeforces
+/// [ranklist row](https://codeforces.com/apiHelp/objects#RanklistRow).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFRanklistRow {
@@ -563,6 +665,7 @@ pub struct CFRanklistRow {
 }
 
 impl fmt::Display for CFRanklistRow {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -571,6 +674,7 @@ impl fmt::Display for CFRanklistRow {
     }
 }
 
+/// Problem result type returned by Codeforces API (Preliminary, Final).
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum CFProblemResultType {
@@ -579,6 +683,7 @@ pub enum CFProblemResultType {
 }
 
 impl fmt::Display for CFProblemResultType {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -587,6 +692,8 @@ impl fmt::Display for CFProblemResultType {
     }
 }
 
+/// Struct representing a Codeforces
+/// [problem result](https://codeforces.com/apiHelp/objects#ProblemResult).
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CFProblemResult {
@@ -599,6 +706,7 @@ pub struct CFProblemResult {
 }
 
 impl fmt::Display for CFProblemResult {
+    /// Display type as yaml using `serde_yaml`.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
