@@ -27,8 +27,10 @@ fn test_api_user() {
     let x = CFUserCommand::Friends { only_online: None };
     match x.get(k, s) {
         Ok(CFResult::CFFriends(v)) => {
-            println!("Received friends list successfully: {}",
-                CFResult::CFFriends(v));
+            println!(
+                "Received friends list successfully: {}",
+                CFResult::CFFriends(v)
+            );
         }
         Ok(_) => {
             panic!("Fail, user.friends response not parsed into Vec<String>");
@@ -78,8 +80,11 @@ fn test_api_problem() {
     };
     match x.get(k, s) {
         Ok(CFResult::CFContestStandings(d)) => {
-            println!("Received contest standings (contest.standings) \
-                successfully: {}", CFResult::CFContestStandings(d));
+            println!(
+                "Received contest standings (contest.standings) \
+                successfully: {}",
+                CFResult::CFContestStandings(d)
+            );
         }
         Ok(_) => {
             panic!(

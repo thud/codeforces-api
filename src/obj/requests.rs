@@ -1,14 +1,14 @@
 //! Contains the structs etc. required to interface with the Codeforces API
 //! and the testcases scraper.
 
-use rand::{self, Rng};
 use hex;
+use lazy_static::lazy_static;
+use rand::{self, Rng};
+use regex::Regex;
 use select::document::Document;
 use select::predicate::{Class, Descendant, Name};
 use sha2::{Digest, Sha512};
 use std::time::SystemTime;
-use regex::Regex;
-use lazy_static::lazy_static;
 
 use super::error::*;
 use super::responses;
@@ -17,7 +17,7 @@ const API_STUB: &str = "https://codeforces.com/api/";
 
 /// Wrapper enum for all API methods of form `blogEntry.<method>`.
 ///
-/// More details for the blogEntry command can be found 
+/// More details for the blogEntry command can be found
 /// [here](https://codeforces.com/apiHelp/methods#blogEntry.comments).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum CFBlogEntryCommand {
@@ -28,11 +28,11 @@ pub enum CFBlogEntryCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFCommentVec`].
     ///
-    /// More details for the `blogEntry.comments` command can be found 
+    /// More details for the `blogEntry.comments` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#blogEntry.comments).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -41,7 +41,7 @@ pub enum CFBlogEntryCommand {
     /// let x = CFBlogEntryCommand::Comments {
     ///     blog_entry_id: 82347,
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFCommentVec(v)) => {
     ///         // your code here
@@ -54,7 +54,7 @@ pub enum CFBlogEntryCommand {
     Comments {
         /// blogEntryId of a blog (can be seen in the url of a blog, eg.
         /// [`/blog/entry/82347`](https://codeforces.com/blog/entry/82347)).
-        blog_entry_id: i64
+        blog_entry_id: i64,
     },
     /// Struct for sending `blogEntry.view` requests to the Codeforces API.
     ///
@@ -63,11 +63,11 @@ pub enum CFBlogEntryCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFBlogEntry`].
     ///
-    /// More details for the `blogEntry.view` command can be found 
+    /// More details for the `blogEntry.view` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#blogEntry.view).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -76,7 +76,7 @@ pub enum CFBlogEntryCommand {
     /// let x = CFBlogEntryCommand::View {
     ///     blog_entry_id: 82347,
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFBlogEntry(e)) => {
     ///         // your code here
@@ -89,13 +89,13 @@ pub enum CFBlogEntryCommand {
     View {
         /// blogEntryId of a blog (can be seen in the url of a blog, eg.
         /// [`/blog/entry/82347`](https://codeforces.com/blog/entry/82347)).
-        blog_entry_id: i64
+        blog_entry_id: i64,
     },
 }
 
 /// Wrapper enum for all API methods of form `contest.<method>`.
 ///
-/// More details for the contest command can be found 
+/// More details for the contest command can be found
 /// [here](https://codeforces.com/apiHelp/methods#contest.hacks).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CFContestCommand {
@@ -108,11 +108,11 @@ pub enum CFContestCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFHackVec`].
     ///
-    /// More details for the `contest.hacks` command can be found 
+    /// More details for the `contest.hacks` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#contest.hacks).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -121,7 +121,7 @@ pub enum CFContestCommand {
     /// let x = CFContestCommand::Hacks {
     ///     contest_id: 1485,
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFHackVec(v)) => {
     ///         // your code here
@@ -143,11 +143,11 @@ pub enum CFContestCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFContestVec`].
     ///
-    /// More details for the `contest.list` command can be found 
+    /// More details for the `contest.list` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#contest.list).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -156,7 +156,7 @@ pub enum CFContestCommand {
     /// let x = CFContestCommand::List {
     ///     gym: Some(false),
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFContestVec(v)) => {
     ///         // your code here
@@ -179,11 +179,11 @@ pub enum CFContestCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFRatingChangeVec`].
     ///
-    /// More details for the `contest.ratingChanges` command can be found 
+    /// More details for the `contest.ratingChanges` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#contest.ratingChanges).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -192,7 +192,7 @@ pub enum CFContestCommand {
     /// let x = CFContestCommand::RatingChanges {
     ///     contest_id: 1485,
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFRatingChangeVec(v)) => {
     ///         // your code here
@@ -215,11 +215,11 @@ pub enum CFContestCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFContestStandings`].
     ///
-    /// More details for the `contest.standings` command can be found 
+    /// More details for the `contest.standings` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#contest.standings).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -233,7 +233,7 @@ pub enum CFContestCommand {
     ///     room: None,
     ///     show_unofficial: Some(false),
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFContestStandings(s)) => {
     ///         // your code here
@@ -269,11 +269,11 @@ pub enum CFContestCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFSubmissionVec`].
     ///
-    /// More details for the `contest.status` command can be found 
+    /// More details for the `contest.status` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#contest.status).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -285,7 +285,7 @@ pub enum CFContestCommand {
     ///     from: Some(1),
     ///     count: Some(3),
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFSubmissionVec(v)) => {
     ///         // your code here
@@ -311,7 +311,7 @@ pub enum CFContestCommand {
 
 /// Wrapper enum for all API methods of form `problemset.<method>`.
 ///
-/// More details for the problemset command can be found 
+/// More details for the problemset command can be found
 /// [here](https://codeforces.com/apiHelp/methods#problemset.problems).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CFProblemsetCommand {
@@ -322,11 +322,11 @@ pub enum CFProblemsetCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFProblemset`].
     ///
-    /// More details for the `problemset.problems` command can be found 
+    /// More details for the `problemset.problems` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#problemset.problems).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -336,7 +336,7 @@ pub enum CFProblemsetCommand {
     ///     tags: Some(vec!["dp".to_string(), "greedy".to_string()]),
     ///     problemset_name: None,
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFProblemset(p)) => {
     ///         // your code here
@@ -360,11 +360,11 @@ pub enum CFProblemsetCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFSubmissionVec`].
     ///
-    /// More details for the `problemset.recentStatus` command can be found 
+    /// More details for the `problemset.recentStatus` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#problemset.recentStatus).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -374,7 +374,7 @@ pub enum CFProblemsetCommand {
     ///     count: 10,
     ///     problemset_name: None,
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFSubmissionVec(v)) => {
     ///         // your code here
@@ -394,7 +394,7 @@ pub enum CFProblemsetCommand {
 
 /// Wrapper enum for all API methods of form `user.<method>`.
 ///
-/// More details for the user command can be found 
+/// More details for the user command can be found
 /// [here](https://codeforces.com/apiHelp/methods#user.blogEntries).
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CFUserCommand {
@@ -406,11 +406,11 @@ pub enum CFUserCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFBlogEntryVec`].
     ///
-    /// More details for the `user.blogEntries` command can be found 
+    /// More details for the `user.blogEntries` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#user.blogEntries).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -419,7 +419,7 @@ pub enum CFUserCommand {
     /// let x = CFUserCommand::BlogEntries {
     ///     handle: "thud".to_string(),
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFBlogEntryVec(v)) => {
     ///         // your code here
@@ -441,11 +441,11 @@ pub enum CFUserCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFFriends`].
     ///
-    /// More details for the `user.friends` command can be found 
+    /// More details for the `user.friends` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#user.friends).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -454,7 +454,7 @@ pub enum CFUserCommand {
     /// let x = CFUserCommand::Friends {
     ///     only_online: None,
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFFriends(v)) => {
     ///         // your code here
@@ -476,11 +476,11 @@ pub enum CFUserCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFUserVec`].
     ///
-    /// More details for the `user.info` command can be found 
+    /// More details for the `user.info` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#user.info).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -489,7 +489,7 @@ pub enum CFUserCommand {
     /// let x = CFUserCommand::Info {
     ///     handles: vec!["thud".to_string()],
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFUserVec(v)) => {
     ///         // your code here
@@ -512,11 +512,11 @@ pub enum CFUserCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFUserVec`].
     ///
-    /// More details for the `user.ratedList` command can be found 
+    /// More details for the `user.ratedList` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#user.ratedList).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -525,7 +525,7 @@ pub enum CFUserCommand {
     /// let x = CFUserCommand::RatedList {
     ///     active_only: Some(true),
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFUserVec(v)) => {
     ///         // your code here
@@ -547,11 +547,11 @@ pub enum CFUserCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFRatingChangeVec`].
     ///
-    /// More details for the `user.rating` command can be found 
+    /// More details for the `user.rating` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#user.rating).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -560,7 +560,7 @@ pub enum CFUserCommand {
     /// let x = CFUserCommand::Rating {
     ///     handle: "thud".to_string(),
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFRatingChangeVec(v)) => {
     ///         // your code here
@@ -581,11 +581,11 @@ pub enum CFUserCommand {
     /// If correctly parsed, the response object will be of type
     /// [`responses::CFResult::CFSubmissionVec`].
     ///
-    /// More details for the `user.status` command can be found 
+    /// More details for the `user.status` command can be found
     /// [here](https://codeforces.com/apiHelp/methods#user.status).
-    /// 
+    ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -596,7 +596,7 @@ pub enum CFUserCommand {
     ///     from: Some(1),
     ///     count: Some(3),
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFSubmissionVec(v)) => {
     ///         // your code here
@@ -623,11 +623,11 @@ pub enum CFUserCommand {
 /// If correctly parsed, the response object will be of type
 /// [`responses::CFResult::CFRecentActionVec`].
 ///
-/// More details for the `recentActions` command can be found 
+/// More details for the `recentActions` command can be found
 /// [here](https://codeforces.com/apiHelp/methods#recentActions).
-/// 
+///
 /// # Examples
-/// 
+///
 /// ```
 /// # use codeforces_api::requests::*;
 /// # use codeforces_api::responses::*;
@@ -636,7 +636,7 @@ pub enum CFUserCommand {
 /// let x = CFRecentActionsCommand {
 ///     max_count: 3,
 /// };
-/// 
+///
 /// match x.get(api_key, api_secret) {
 ///     Ok(CFResult::CFRecentActionVec(v)) => {
 ///         // your code here
@@ -662,9 +662,9 @@ fn as_codeforces_api_url<T: CFAPIRequestable + std::fmt::Debug>(
 ) -> String {
     // generate random number to be used as nonce in url.
     let mut rng = rand::thread_rng();
-    let rand: String = (0..6).map(|_| {
-        rng.gen_range::<u8,_>(0..=9).to_string()
-    }).collect();
+    let rand: String = (0..6)
+        .map(|_| rng.gen_range::<u8, _>(0..=9).to_string())
+        .collect();
     // get current UNIX time to be used in url.
     let ctime = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
@@ -755,9 +755,7 @@ fn send_codeforces_api_req_raw<T: CFAPIRequestable + std::fmt::Debug>(
 /// Simple blocking request to url using [`reqwest::blocking::get`]. This is
 /// not very efficient for rapidly making lots of requests since the function
 /// creates and destroys a new [`reqwest::Client`] with every request.
-fn get_url(
-    url: &str,
-) -> Result<reqwest::blocking::Response, reqwest::Error> {
+fn get_url(url: &str) -> Result<reqwest::blocking::Response, reqwest::Error> {
     let body = reqwest::blocking::get(url);
     body
 }
@@ -792,7 +790,7 @@ pub trait CFAPIRequestable {
     /// Fetch response from Codeforces servers.
     ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -803,7 +801,7 @@ pub trait CFAPIRequestable {
     ///     from: Some(1),
     ///     count: Some(3),
     /// };
-    /// 
+    ///
     /// match x.get(api_key, api_secret) {
     ///     Ok(CFResult::CFSubmissionVec(v)) => {
     ///         // your code here
@@ -821,7 +819,7 @@ pub trait CFAPIRequestable {
     /// Fetch raw JSON response from Codeforces servers.
     ///
     /// # Examples
-    /// 
+    ///
     /// ```
     /// # use codeforces_api::requests::*;
     /// # use codeforces_api::responses::*;
@@ -832,7 +830,7 @@ pub trait CFAPIRequestable {
     ///     from: Some(1),
     ///     count: Some(3),
     /// };
-    /// 
+    ///
     /// match x.get_raw(api_key, api_secret) {
     ///     Ok(s) => {
     ///         assert!(s.starts_with("{\"status\":\"OK\""));
@@ -843,11 +841,8 @@ pub trait CFAPIRequestable {
     ///     }
     /// }
     /// ```
-    fn get_raw(
-        &self,
-        api_key: &str,
-        api_secret: &str,
-    ) -> Result<String, Error>;
+    fn get_raw(&self, api_key: &str, api_secret: &str)
+        -> Result<String, Error>;
 }
 
 impl CFAPIRequestable for CFBlogEntryCommand {
@@ -1185,8 +1180,10 @@ pub fn fetch_testcases_for_problem(
                 .map(|e| RE.replace_all(&e, "\n").into())
                 .collect();
             if testcases.is_empty() {
-                Err(Error::Testcases("No testcase input found for this \
-                        problem."))
+                Err(Error::Testcases(
+                    "No testcase input found for this \
+                        problem.",
+                ))
             } else {
                 Ok(testcases)
             }
@@ -1208,8 +1205,10 @@ impl responses::CFProblem {
     /// Uses [`fetch_testcases_for_problem`] under the hood.
     pub fn fetch_testcases(&mut self) -> Result<Vec<String>, Error> {
         if self.contest_id.is_none() {
-            return Err(Error::Testcases("problem.contest_id field is \
-                    required."));
+            return Err(Error::Testcases(
+                "problem.contest_id field is \
+                    required.",
+            ));
         }
         if self.index.is_none() {
             return Err(Error::Testcases("problem.index field is required."));

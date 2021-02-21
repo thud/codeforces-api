@@ -1,7 +1,7 @@
 /// Error type for requests sent through this crate.
 ///
 /// When sending a request is unsuccessful, a variant of the [`Error`] type
-/// will be returned. 
+/// will be returned.
 #[derive(Debug)]
 pub enum Error {
     /// `Http` errors are a wrapper for network errors returned internally by
@@ -18,7 +18,7 @@ pub enum Error {
     /// malformed JSON. Further documentation can be found with the
     /// [`reqwest::Error`] type.
     Parse(reqwest::Error),
-    /// `CodeforcesApi` errors are returned when the Codeforces API returns a 
+    /// `CodeforcesApi` errors are returned when the Codeforces API returns a
     /// `status: FAILED` response, the comment field of the response is returned
     /// as a [`String`]
     CodeforcesApi(String),

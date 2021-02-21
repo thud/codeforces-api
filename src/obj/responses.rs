@@ -1,9 +1,9 @@
 //! Contains the structs etc. which are returned by the Codeforces API
 //! following a request.
 
-use std::fmt;
 use serde::{Deserialize, Serialize};
 use serde_yaml;
+use std::fmt;
 
 /// Response code returned by Codeforces API (Ok, Failed).
 ///
@@ -20,7 +20,7 @@ impl fmt::Display for CFResponseStatus {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -44,7 +44,7 @@ impl fmt::Display for CFResponse {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -67,7 +67,7 @@ impl fmt::Display for CFResponse {
 ///     from: Some(1),
 ///     count: Some(3),
 /// };
-/// 
+///
 /// // x.get(..) will return a CFResult type. You should match on it to make
 /// // sure that it returned the type you expected.
 /// // To check which type a request should return, you can check its docs.
@@ -99,7 +99,7 @@ impl fmt::Display for CFResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -135,7 +135,7 @@ impl fmt::Display for CFUser {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -163,7 +163,7 @@ impl fmt::Display for CFBlogEntry {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -187,7 +187,7 @@ impl fmt::Display for CFComment {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -207,7 +207,7 @@ impl fmt::Display for CFRecentAction {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -231,7 +231,7 @@ impl fmt::Display for CFRatingChange {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -250,7 +250,7 @@ impl fmt::Display for CFContestType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -271,7 +271,7 @@ impl fmt::Display for CFContestPhase {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -292,7 +292,7 @@ impl fmt::Display for CFContestStandings {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -326,7 +326,7 @@ impl fmt::Display for CFContest {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -347,7 +347,7 @@ impl fmt::Display for CFParticipantType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -372,7 +372,7 @@ impl fmt::Display for CFParty {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -390,7 +390,7 @@ impl fmt::Display for CFMember {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -408,7 +408,7 @@ impl fmt::Display for CFProblemType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -436,7 +436,7 @@ impl fmt::Display for CFProblem {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -456,7 +456,7 @@ impl fmt::Display for CFProblemStatistics {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -476,7 +476,7 @@ impl fmt::Display for CFProblemset {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -509,7 +509,7 @@ impl fmt::Display for CFSubmissionVerdict {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -549,7 +549,7 @@ impl fmt::Display for CFTestset {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -579,7 +579,7 @@ impl fmt::Display for CFSubmission {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -603,7 +603,7 @@ impl fmt::Display for CFHackVerdict {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -622,7 +622,7 @@ impl fmt::Display for CFJudgeProtocol {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -647,7 +647,7 @@ impl fmt::Display for CFHack {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -672,7 +672,7 @@ impl fmt::Display for CFRanklistRow {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -690,7 +690,7 @@ impl fmt::Display for CFProblemResultType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
@@ -713,8 +713,7 @@ impl fmt::Display for CFProblemResult {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
-            Err(_) => Err(fmt::Error)
+            Err(_) => Err(fmt::Error),
         }
     }
 }
-

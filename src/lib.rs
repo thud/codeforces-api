@@ -19,13 +19,13 @@
 //! ```no_run
 //! use codeforces_api::requests::{CFBlogEntryCommand, CFAPIRequestable};
 //! use codeforces_api::responses::CFResult;
-//! 
+//!
 //! fn main() {
 //!     // This is equivalent to the Codeforces `blogEntry.view` API method.
 //!     let x = CFBlogEntryCommand::View {
 //!         blog_entry_id: 82347,
 //!     };
-//! 
+//!
 //!     // The `.get(..)` method on API commands returns a result with either
 //!     // an error or an `Ok(CFResult)`.
 //!     match x.get("<api_key>", "<api_secret>") {
@@ -50,8 +50,8 @@
 //! ```
 
 mod obj;
-pub use obj::{requests, responses};
 pub use obj::error::Error;
+pub use obj::{requests, responses};
 
 #[cfg(test)]
 mod test;
