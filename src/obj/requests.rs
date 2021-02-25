@@ -1,7 +1,6 @@
 //! Contains the structs etc. required to interface with the Codeforces API
 //! and the testcases scraper.
 
-use hex;
 use lazy_static::lazy_static;
 use rand::{self, Rng};
 use regex::Regex;
@@ -756,15 +755,13 @@ fn send_codeforces_api_req_raw<T: CFAPIRequestable + std::fmt::Debug>(
 /// not very efficient for rapidly making lots of requests since the function
 /// creates and destroys a new [`reqwest::Client`] with every request.
 fn get_url(url: &str) -> Result<reqwest::blocking::Response, reqwest::Error> {
-    let body = reqwest::blocking::get(url);
-    body
+    reqwest::blocking::get(url)
 }
 
 /// Analogous to `get_url()`, but immediately returns just the text content of
 /// the request.
 fn get_url_raw(url: &str) -> Result<String, Error> {
-    let body = get_url(url);
-    match body {
+    match get_url(url) {
         Ok(res) => match res.text() {
             Ok(text) => Ok(text),
             Err(e) => Err(Error::Http(e)),

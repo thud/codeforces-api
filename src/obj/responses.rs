@@ -2,7 +2,6 @@
 //! following a request.
 
 use serde::{Deserialize, Serialize};
-use serde_yaml;
 use std::fmt;
 
 /// Response code returned by Codeforces API (Ok, Failed).
