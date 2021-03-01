@@ -47,7 +47,7 @@ jobs:
         args: --dry-run
 
   publish:
-    if: startsWith(github.ref, 'refs/tags/releases/')
+    if: startsWith(github.ref, 'refs/tags/')
     needs: 
       - fmt-lint
       - publish-check
