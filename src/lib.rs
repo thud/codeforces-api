@@ -1,3 +1,5 @@
+#![allow(clippy::needless_doctest_main)]
+
 //! codeforces-api crate - interact with the
 //! [Codeforces](https://codeforces.com/) API.
 //!

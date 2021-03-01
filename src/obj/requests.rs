@@ -1039,6 +1039,7 @@ impl CFAPIRequestable for CFProblemsetCommand {
 }
 
 impl CFAPIRequestable for CFRecentActionsCommand {
+    #[allow(clippy::vec_init_then_push)]
     fn query_params(&self) -> Vec<(&'static str, String)> {
         let mut res = vec![];
         res.push(("maxCount", self.max_count.to_string()));
