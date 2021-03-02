@@ -1,13 +1,18 @@
 //! Contains the structs etc. required to interface with the Codeforces API
 //! and the testcases scraper.
 
-use lazy_static::lazy_static;
 use rand::{self, Rng};
-use regex::Regex;
-use select::document::Document;
-use select::predicate::{Class, Descendant, Name};
 use sha2::{Digest, Sha512};
 use std::time::SystemTime;
+
+#[cfg(feature = "use_testcase_fetcher")]
+use lazy_static::lazy_static;
+#[cfg(feature = "use_testcase_fetcher")]
+use regex::Regex;
+#[cfg(feature = "use_testcase_fetcher")]
+use select::document::Document;
+#[cfg(feature = "use_testcase_fetcher")]
+use select::predicate::{Class, Descendant, Name};
 
 use super::error::*;
 use super::responses;
@@ -1153,6 +1158,7 @@ impl CFAPIRequestable for CFUserCommand {
 ///
 /// Used internally to provide
 /// [`problem.fetch_testcases()`](responses::CFProblem::fetch_testcases).
+#[cfg(feature = "use_testcase_fetcher")]
 pub fn fetch_testcases_for_problem(
     contest_id: &i64,
     problem_index: &str,
@@ -1190,6 +1196,7 @@ pub fn fetch_testcases_for_problem(
     }
 }
 
+#[cfg(feature = "use_testcase_fetcher")]
 impl responses::CFProblem {
     /// Extra method which allows a user to fetch testcases directly from a
     /// [`CFProblem`](super::responses::CFProblem).

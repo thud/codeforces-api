@@ -28,7 +28,7 @@ fn test_api_user() {
     match x.get(k, s) {
         Ok(CFResult::CFFriends(v)) => {
             println!(
-                "Received friends list successfully: {}",
+                "Received friends list successfully: {:?}",
                 CFResult::CFFriends(v)
             );
         }
@@ -52,7 +52,7 @@ fn test_api_user_status() {
     match x.get(k, s) {
         Ok(CFResult::CFSubmissionVec(v)) => {
             println!(
-                "Received user submissions (user.status) successfully: {}",
+                "Received user submissions (user.status) successfully: {:?}",
                 CFResult::CFSubmissionVec(v)
             );
         }
@@ -82,7 +82,7 @@ fn test_api_problem() {
         Ok(CFResult::CFContestStandings(d)) => {
             println!(
                 "Received contest standings (contest.standings) \
-                successfully: {}",
+                successfully: {:?}",
                 CFResult::CFContestStandings(d)
             );
         }
@@ -98,6 +98,7 @@ fn test_api_problem() {
     }
 }
 
+#[cfg(feature = "use_testcase_fetcher")]
 #[test]
 fn test_fetch_testcase() {
     let mut p = CFProblem {

@@ -2,6 +2,8 @@
 //! following a request.
 
 use serde::{Deserialize, Serialize};
+
+#[cfg(feature = "serde_yaml")]
 use std::fmt;
 
 /// Response code returned by Codeforces API (Ok, Failed).
@@ -14,8 +16,9 @@ pub enum CFResponseStatus {
     Failed,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFResponseStatus {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -38,8 +41,9 @@ pub struct CFResponse {
     pub comment: Option<String>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFResponse {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -93,8 +97,9 @@ pub enum CFResult {
     CFUserVec(Vec<CFUser>),
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFResult {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -129,8 +134,9 @@ pub struct CFUser {
     pub title_photo: String,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFUser {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -157,8 +163,9 @@ pub struct CFBlogEntry {
     pub rating: i64,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFBlogEntry {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -181,8 +188,9 @@ pub struct CFComment {
     pub rating: i64,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFComment {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -201,8 +209,9 @@ pub struct CFRecentAction {
     pub comment: Option<CFComment>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFRecentAction {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -225,8 +234,9 @@ pub struct CFRatingChange {
     pub new_rating: i64,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFRatingChange {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -244,8 +254,9 @@ pub enum CFContestType {
     ICPC,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFContestType {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -265,8 +276,9 @@ pub enum CFContestPhase {
     Finished,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFContestPhase {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -286,8 +298,9 @@ pub struct CFContestStandings {
     pub rows: Vec<CFRanklistRow>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFContestStandings {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -320,8 +333,9 @@ pub struct CFContest {
     pub season: Option<String>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFContest {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -341,8 +355,9 @@ pub enum CFParticipantType {
     OutOfCompetition,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFParticipantType {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -366,8 +381,9 @@ pub struct CFParty {
     pub start_time_seconds: Option<i64>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFParty {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -384,8 +400,9 @@ pub struct CFMember {
     pub handle: String,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFMember {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -402,8 +419,9 @@ pub enum CFProblemType {
     Question,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFProblemType {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -430,8 +448,9 @@ pub struct CFProblem {
     pub input_testcases: Option<Vec<String>>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFProblem {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -450,8 +469,9 @@ pub struct CFProblemStatistics {
     pub solved_count: i64,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFProblemStatistics {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -470,8 +490,9 @@ pub struct CFProblemset {
     pub problem_statistics: Vec<CFProblemStatistics>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFProblemset {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -503,8 +524,9 @@ pub enum CFSubmissionVerdict {
     Rejected,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFSubmissionVerdict {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -543,8 +565,9 @@ pub enum CFTestset {
     TestSet10,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFTestset {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -573,8 +596,9 @@ pub struct CFSubmission {
     pub points: Option<f64>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFSubmission {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -597,8 +621,9 @@ pub enum CFHackVerdict {
     Other,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFHackVerdict {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -616,8 +641,9 @@ pub struct CFJudgeProtocol {
     pub verdict: String,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFJudgeProtocol {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -641,8 +667,9 @@ pub struct CFHack {
     pub judge_protocol: Option<CFJudgeProtocol>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFHack {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -666,8 +693,9 @@ pub struct CFRanklistRow {
     pub last_submission_time_seconds: Option<i64>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFRanklistRow {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -684,8 +712,9 @@ pub enum CFProblemResultType {
     Final,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFProblemResultType {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
@@ -707,8 +736,9 @@ pub struct CFProblemResult {
     pub best_submission_time_seconds: Option<i64>,
 }
 
+#[cfg(feature = "serde_yaml")]
 impl fmt::Display for CFProblemResult {
-    /// Display type as yaml using `serde_yaml`.
+    /// Display type as yaml using `serde_yaml` (requires `serde_yaml` feature).
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match serde_yaml::to_string(self) {
             Ok(s) => write!(f, "{}", s),
